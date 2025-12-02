@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - TODO{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {% if todo.completed %}✅{% else %}⬜{% endif %}
+                {{ todo.title }}
+            </li>
+        {% empty %}
+            <li>Aucune tâche pour le moment.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
