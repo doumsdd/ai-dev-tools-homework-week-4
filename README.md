@@ -1,22 +1,22 @@
 # Agent Relay - Week 3 Homework: DevOps & Cloud Native Deployment
 
-## 📋 Homework Overview
+## Homework Overview
 
 This project demonstrates the complete journey of transforming a SQLite-based FastAPI application into a production-ready, cloud-native application with PostgreSQL, Docker, Kubernetes, and CI/CD pipelines.
 
-## 🎯 Learning Objectives
+## Learning Objectives
 
 1. Database migration from SQLite to PostgreSQL
 2. Containerization with Docker and Docker Compose
 3. Kubernetes deployment with persistent storage and health checks
 4. CI/CD pipeline implementation with GitHub Actions
-5. Local development and testing with ct
+5. Local development and testing with act
 
 ---
 
-## 🚀 Step-by-Step Process
+## Step-by-Step Process
 
-### Step 1: Database Migration (SQLite → PostgreSQL)
+### Step 1: Database Migration (SQLite to PostgreSQL)
 
 **Objective**: Migrate from SQLite to PostgreSQL while maintaining backward compatibility.
 
@@ -40,7 +40,7 @@ This project demonstrates the complete journey of transforming a SQLite-based Fa
 - .dockerignore - Excludes unnecessary files from the image
 - compose.yaml - Two-service stack (API + PostgreSQL)
 
-**✅ Question 1 Answered**: 
+**Question 1 Answered**: 
 > **Which hostname should the API use to connect to the postgres service?**
 > 
 > **Answer: postgres** (the service name)
@@ -59,7 +59,7 @@ This project demonstrates the complete journey of transforming a SQLite-based Fa
 - API Deployment (2 replicas) & Service
 - Kustomization for one-command deployment
 
-**✅ Question 2 Answered**:
+**Question 2 Answered**:
 > **Which Kubernetes resource keeps the requested number of application replicas running and manages updates?**
 > 
 > **Answer: Deployment**
@@ -74,23 +74,22 @@ This project demonstrates the complete journey of transforming a SQLite-based Fa
 
 **Created Files**:
 - .github/workflows/ci.yml - GitHub Actions workflow
-- .actrc - Configuration for running workflows locally with ct
+- .actrc - Configuration for running workflows locally with act
 
 **Pipeline Stages**:
 1. **test**: Run unit tests (SQLite) + integration tests (PostgreSQL)
 2. **build-and-deploy**: Build image, deploy to kind (only if tests pass)
 
-**✅ Question 3 Answered**:
+**Question 3 Answered**:
 > **What should happen if a test fails in this workflow?**
 > 
 > **Answer: Keep the existing version running and stop the deployment.**
 > 
-> The workflow uses 
-eeds: test to ensure build-and-deploy only runs if tests pass.
+> The workflow uses needs: test to ensure build-and-deploy only runs if tests pass.
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 - **QUESTIONS_ANSWERS.md** - All questions and answers from the homework
 - **POSTGRES_MIGRATION.md** - Detailed PostgreSQL migration guide
@@ -101,7 +100,7 @@ eeds: test to ensure build-and-deploy only runs if tests pass.
 
 ---
 
-## 🔧 Prerequisites
+## Prerequisites
 
 ### Required Tools
 - Python 3.11+
@@ -121,7 +120,7 @@ winget install nektos.act
 
 ---
 
-## 🧪 Quick Start
+## Quick Start
 
 `ash
 # Install dependencies
@@ -145,29 +144,20 @@ act push -P ubuntu-latest=catthehacker/ubuntu:act-latest
 
 ---
 
-## 📊 Architecture
+## Architecture
 
 `
-┌─────────────────────────────────────────────────────────┐
-│                  Kubernetes Cluster                      │
-│  ┌────────────────────────────────────────────────┐     │
-│  │           Namespace: agent-relay                │     │
-│  │  ┌──────────────────┐      ┌────────────────┐ │     │
-│  │  │   PostgreSQL     │◄─────┤  API (2 pods)  │ │     │
-│  │  │   (PVC: 1Gi)     │      │                │ │     │
-│  │  └──────────────────┘      └────────────────┘ │     │
-│  └────────────────────────────────────────────────┘     │
-└─────────────────────────────────────────────────────────┘
-                           │ port-forward
-                           ▼
-                ┌──────────────────┐
-                │  localhost:8000  │
-                └──────────────────┘
+Kubernetes Cluster
+  Namespace: agent-relay
+    PostgreSQL (PVC: 1Gi) <-- API (2 pods)
+                           |
+                           v
+                localhost:8000 (port-forward)
 `
 
 ---
 
-## 🎓 Key Concepts Learned
+## Key Concepts Learned
 
 1. **Database Abstraction** - Supporting multiple backends with database-specific optimizations
 2. **Containerization** - Docker builds, service orchestration, health checks
@@ -177,14 +167,14 @@ act push -P ubuntu-latest=catthehacker/ubuntu:act-latest
 
 ---
 
-## 📝 Summary
+## Summary
 
 This homework demonstrates a complete DevOps transformation:
 
-✅ **Database Migration**: SQLite → PostgreSQL with dual support  
-✅ **Containerization**: Docker + Docker Compose  
-✅ **Kubernetes**: Full deployment with persistent storage and health checks  
-✅ **CI/CD**: Automated testing and deployment pipeline  
-✅ **Local Development**: Run entire pipeline locally with ct
+- **Database Migration**: SQLite to PostgreSQL with dual support  
+- **Containerization**: Docker + Docker Compose  
+- **Kubernetes**: Full deployment with persistent storage and health checks  
+- **CI/CD**: Automated testing and deployment pipeline  
+- **Local Development**: Run entire pipeline locally with act
 
 All components work together to provide a production-ready, cloud-native application with automated testing, deployment, and zero-downtime updates.
