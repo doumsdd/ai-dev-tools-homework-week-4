@@ -1,4 +1,4 @@
-﻿# Agent Relay - Week 3 Homework: DevOps & Cloud Native Deployment
+# Agent Relay - Week 3 Homework: DevOps & Cloud Native Deployment
 
 ## 📋 Homework Overview
 
