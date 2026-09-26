@@ -312,6 +312,62 @@ async def get_tasks():
 
 See `docs/operations-and-security-report.md` for the complete incident documentation.
 
+---
+
+## Practical Verification Questions
+
+### What does the health check return?
+
+The `/health` endpoint returns:
+
+```json
+{"status": "healthy"}
+```
+
+This is defined in `main.py`:
+
+```python
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+```
+
+### Which HTTP status code does the metric record for this lookup?
+
+The health check returns **HTTP 200 OK** (default for successful FastAPI routes).
+
+### Which HTTP status code does the metric show in Grafana?
+
+Grafana (via Prometheus) shows **HTTP 200** for successful health check requests. The metric `http_requests_total{status="200"}` increments for each successful `/health` call.
+
+### What state does Grafana show for the 5xx alert?
+
+When the system is healthy (no 5xx errors), Grafana shows the `HighErrorRate` alert in **"OK"** or **"Inactive"** state. The alert only fires when the error rate exceeds 5% over 1 minute.
+
+### What did the agent respond? Include the last line from its answer.
+
+The agent (Claude via Cline IDE) responded with a structured JSON analysis in `incident-response/incident-001-analysis.json`:
+
+```json
+{
+  "root_cause": "Exception non gérée dans la route GET /api/v1/tasks (main.py). La fonction get_tasks() lève une Exception('Simulation de panne en production') sans mécanisme de try-catch, causant des erreurs HTTP 500 systématiques.",
+  "proposed_action": "Ajouter un bloc try-except dans la route /api/v1/tasks pour capturer l'exception, logger l'erreur avec contexte, et retourner une réponse HTTP 500 structurée avec un message d'erreur approprié pour le client.",
+  "confidence_score": 0.92,
+  "requires_human_approval": true
+}
+```
+
+**Last line of the answer:** `"requires_human_approval": true`
+
+### What was the problem?
+
+**The problem:** The `/api/v1/tasks` endpoint raised an unhandled exception (`Exception('Simulation de panne en production')`) without a try-except block, causing systematic HTTP 500 errors.
+
+**Impact:** Agent tasks failed with 500 errors, preventing agents from retrieving their results. The `HighErrorRate` Prometheus alert fired when the error rate exceeded 5%.
+
+**Solution:** Added a try-except block to catch exceptions, log them with structured context (including stack trace), and return a structured HTTP 500 response with error details.
+
+
 
 
 
