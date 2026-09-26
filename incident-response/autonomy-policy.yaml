@@ -1,0 +1,10 @@
+agent_name: "first-responder"
+permissions:
+  - read_logs
+  - read_metrics
+  - propose_fix
+forbidden_actions:
+  - delete_database
+  - restart_production_server
+  - modify_credentials
+max_confidence_threshold_for_auto_action: 0.95

@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "root_cause": {"type": "string"},
+    "proposed_action": {"type": "string"},
+    "confidence_score": {"type": "number", "minimum": 0, "maximum": 1},
+    "requires_human_approval": {"type": "boolean"}
+  },
+  "required": ["root_cause", "proposed_action", "confidence_score", "requires_human_approval"]
+}
